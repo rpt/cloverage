@@ -297,6 +297,7 @@
                ;; bit.ly/codeship-env-vars
                (= (System/getenv "CI_NAME") "codeship")
                  (service-info "codeship" "CI_BUILD_NUMBER"))
+          repo-token (System/getenv "COVERALLS_REPO_TOKEN")
           covdata (map
                     (fn [[file file-forms]]
                       (let [lines (line-stats file-forms)]
@@ -316,6 +317,7 @@
           (with-out-writer (File. out-dir "coveralls.json")
             (print (json/generate-string {:service_job_id job-id
                                           :service_name service
+                                          :repo_token repo-token
                                           :source_files covdata}))))))
 
 (defn raw-report [out-dir stats covered]
